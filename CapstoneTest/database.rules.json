@@ -1,0 +1,125 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "users": {
+      ".indexOn": ["roleStatus"],
+      "$userId": {
+        ".read": "auth != null && (auth.uid === $userId || root.child('users').child($userId).child('email').val() === auth.token.email)",
+        ".write": "auth != null && (auth.uid === $userId || auth.token.role === 'hr')",
+        "email": { ".validate": "newData.isString() && newData.val().length > 5" },
+        "name": { ".validate": "newData.isString()" },
+        "role": { ".validate": "newData.isString()" },
+        "employeeId": { ".validate": "newData.isString()" },
+        "employeeType": { ".validate": "newData.isString()" },
+        "department": { ".validate": "newData.isString()" },
+        "position": { ".validate": "newData.isString()" }
+      }
+    },
+
+    "employeeTypes": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.role === 'hr'",
+      "$typeId": {
+        "name": { ".validate": "newData.isString()" },
+        "salaryType": { ".validate": "newData.isString()" },
+        "rate": { ".validate": "newData.isNumber()" },
+        "overtimeRate": { ".validate": "newData.isNumber()" },
+        "lateDeduction": { ".validate": "newData.isNumber()" },
+        "customFields": { ".validate": "newData.hasChildren()" }
+      }
+    },
+
+    "companySettings": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.role === 'hr'",
+      "name": { ".validate": "newData.isString()" },
+      "logo": { ".validate": "newData.isString()" },
+      "address": { ".validate": "newData.isString()" },
+      "workingHours": {
+        "start": { ".validate": "newData.isString()" },
+        "end": { ".validate": "newData.isString()" },
+        "gracePeriod": { ".validate": "newData.isNumber()" }
+      },
+      "overtimeSettings": {
+        "enabled": { ".validate": "newData.isBoolean()" },
+        "minHours": { ".validate": "newData.isNumber()" }
+      }
+    },
+
+    "systemSettings": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.role === 'hr' || auth.token.role === 'admin')",
+      "branding": {
+        "name": { ".validate": "newData.isString()" },
+        "tagline": { ".validate": "newData.isString()" }
+      },
+      "theme": {
+        "primaryColor": { ".validate": "newData.isString()" },
+        "sidebar": { ".validate": "newData.isString()" },
+        "sidebarText": { ".validate": "newData.isString()" }
+      },
+      "dtrSummary": {
+        "widgets": { ".validate": "newData.hasChildren()" }
+      }
+    },
+
+    "pendingEnrollments": {
+      ".read": "auth != null && auth.token.role === 'hr'",
+      "$enrollId": {
+        ".write": "(auth != null && auth.token.role === 'hr') || (auth == null && newData.hasChildren())",
+        "fingerprintId": { ".validate": "newData.isString() || newData.val() == null" },
+        "email": { ".validate": "newData.isString() || newData.val() == null" }
+      }
+    },
+
+    "attendance": {
+      "$date": {
+        "$time": {
+          ".write": "auth != null && (newData.child('userId').val() === auth.uid || auth.token.role === 'hr' || auth.token.role === 'device')",
+          ".read": "auth != null",
+          "userId": { ".validate": "newData.isString() || newData.val() == null" },
+          "employeeId": { ".validate": "newData.isString() || newData.val() == null" },
+          "type": { ".validate": "newData.isString()" },
+          "status": { ".validate": "newData.isString()" },
+          "timestamp": { ".validate": "newData.isNumber() || newData.val() == null" }
+        }
+      }
+    },
+
+    "leaveRequests": {
+      "$employeeId": {
+        "$requestId": {
+          ".read": "auth != null && (auth.token.role === 'hr' || auth.uid === $employeeId)",
+          ".write": "auth != null && (auth.token.role === 'hr' || auth.uid === $employeeId)",
+          "startDate": { ".validate": "newData.isString() || newData.val() == null" },
+          "endDate": { ".validate": "newData.isString() || newData.val() == null" },
+          "status": { ".validate": "newData.isString()" }
+        }
+      }
+    },
+
+    "notifications": {
+      "$userId": {
+        ".read": "auth != null && auth.uid === $userId",
+        ".write": "auth != null && (auth.uid === $userId || auth.token.role === 'hr')"
+      }
+    },
+
+    "auditLogs": {
+      ".read": "auth != null && auth.token.role === 'hr'",
+      ".write": "false"
+    },
+
+    "payroll": {
+      ".read": "auth != null && auth.token.role === 'hr'",
+      ".write": "auth != null && auth.token.role === 'hr'"
+    },
+
+    "devices": {
+      ".read": "auth != null && (auth.token.role === 'hr' || auth.token.role === 'device')",
+      ".write": "auth != null && (auth.token.role === 'hr' || auth.token.role === 'device')"
+    }
+  }
+}

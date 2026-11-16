@@ -1,0 +1,120 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+// ... (previous imports remain the same)
+
+const DTRSummary = () => {
+  // ... (previous state and functions remain the same)
+
+  return (
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      {/* ... (previous JSX remains the same until the table) */}
+      <div className="hidden sm:block overflow-x-auto h-64">
+        <table className="w-full text-left text-sm">
+          <thead>
+            <tr className="border-b-2 border-gray-200 font-semibold text-gray-700">
+              <th className="py-4 px-4">Name</th>
+              <th className="py-4 px-4">Status</th>
+              <th className="py-4 px-4 text-left">Check In</th>
+              <th className="py-4 px-4 text-left">Check Out</th>
+            </tr>
+          </thead>
+          <tbody>
+            <AnimatePresence>
+              {paginatedData.length > 0 ? (
+                paginatedData.map((entry, idx) => (
+                  <motion.tr
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2, delay: idx * 0.05 }}
+                    className="border-b border-gray-100 hover:bg-gray-50"
+                  >
+                    <td className="py-3 px-4 font-medium text-gray-900">
+                      {getUserName(entry.userId)}
+                    </td>
+                    <td className="py-3 px-4">
+                      <span
+                        className={`inline-flex items-center gap-2 px-2 py-1 rounded-full text-xs font-medium border ${
+                          (() => {
+                            const status = (entry.status || '').toString().toLowerCase();
+                            switch (status) {
+                              case 'present':
+                              case 'on time':
+                                return 'bg-green-100 text-green-800 border-green-200';
+                              case 'late':
+                                return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+                              case 'absent':
+                                return 'bg-red-100 text-red-800 border-red-200';
+                              case 'early':
+                                return 'bg-blue-100 text-blue-800 border-blue-200';
+                              default:
+                                return 'bg-gray-100 text-gray-800 border-gray-200';
+                            }
+                          })()
+                        }`}
+                      >
+                        {(() => {
+                          const status = (entry.status || '').toString().toLowerCase();
+                          switch (status) {
+                            case 'present':
+                            case 'on time':
+                              return <CheckCircle className="w-4 h-4" />;
+                            case 'late':
+                              return <ClockIcon className="w-4 h-4" />;
+                            case 'absent':
+                              return <AlertTriangle className="w-4 h-4" />;
+                            case 'early':
+                              return <Clock className="w-4 h-4" />;
+                            default:
+                              return null;
+                          }
+                        })()}
+                        {(entry.status || '').toString().charAt(0).toUpperCase() +
+                          (entry.status || '').toString().slice(1).toLowerCase()}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 whitespace-nowrap">
+                      {(() => {
+                        const iso =
+                          getCheckInIso(entry) ||
+                          entry.checkIn ||
+                          entry.check_in ||
+                          entry.time ||
+                          entry.timestamp;
+                        if (!iso) return 'No check in recorded';
+                        return formatTime(iso);
+                      })()}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 whitespace-nowrap">
+                      {(() => {
+                        const iso =
+                          getCheckOutIso(entry) ||
+                          entry.checkOut ||
+                          entry.check_out ||
+                          entry.checkOutTimestamp ||
+                          null;
+                        if (!iso) return 'No check out';
+                        return formatTime(iso);
+                      })()}
+                    </td>
+                  </motion.tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center py-12 text-gray-500">
+                    <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    No attendance data found.
+                  </td>
+                </tr>
+              )}
+            </AnimatePresence>
+          </tbody>
+        </table>
+      </div>
+      {/* ... (rest of the JSX remains the same) */}
+    </div>
+  );
+};
+
+export default React.memo(DTRSummary);

@@ -1,0 +1,45 @@
+{
+  "11": {
+    "userId": "11",
+    "periodStart": "2025-11-01",
+    "periodEnd": "2025-11-30",
+    "basicPay": 7200,
+    "adjustment": 0,
+    "grossSalary": 7200,
+    "breakdown": {
+      "salaryRate": 100,
+      "baseSalary": 7200,
+      "hourly": {
+        "totalHours": 72,
+        "baseEarnings": 7200,
+        "overtimeHours": 0,
+        "overtimeEarnings": 0
+      },
+      "serviceCredits": 0,
+      "regularHolidayPay": 800,
+      "specialHolidayPay": 1040,
+      "thirteenthMonth": 600
+    },
+    "netSalary": 11075.3,
+    "deductions": {
+      "SSS": 288,
+      "PhilHealth": 126,
+      "PagIBIG": 144,
+      "total": 558
+    },
+    "allowances": {
+      "bonus": 2000,
+      "total": 2000
+    },
+    "otherPayables": {},
+    "otherPayablesTotal": 0,
+    "employeeInfo": {
+      "name": "Lance De Jesus",
+      "type": "Part-Time",
+      "salaryType": "hourly",
+      "rate": 100
+    },
+    "status": "pending",
+    "createdAt": "2025-11-12T00:00:00.000Z"
+  }
+}

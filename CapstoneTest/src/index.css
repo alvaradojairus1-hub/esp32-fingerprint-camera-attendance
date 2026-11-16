@@ -1,0 +1,283 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ensure consistent text-size behavior across browsers (compatibility) */
+html, :host {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
+/* Provide standard appearance property to complement vendor-prefixed rules */
+button, input, select { 
+	-webkit-appearance: none; /* some UA styles rely on prefixed version */
+	appearance: none;
+}
+
+/* Re-declare for specific controls where Tailwind/normalize uses -webkit-appearance */
+button, input:where([type=button]), input:where([type=reset]), input:where([type=submit]) {
+	-webkit-appearance: button;
+	appearance: button;
+}
+[type=search] {
+	-webkit-appearance: textfield;
+	appearance: textfield;
+}
+::-webkit-file-upload-button {
+	-webkit-appearance: button;
+	appearance: button;
+}
+
+/*
+	Dark mode overrides: some components use Tailwind utility classes
+	(e.g. bg-white, text-gray-800, border-gray-100) without dark: variants.
+	To make the app darker when the `.dark` class is present on <html> we
+	provide targeted overrides for the most common utility classes used
+	across the UI. These are intentionally conservative and use !important
+	to override the generated utilities where necessary.
+*/
+
+/* Page-level */
+.dark body {
+	background-color: #071021; /* deep neutral */
+	color: #e5e7eb;
+}
+
+/* Card and panel backgrounds */
+.dark .bg-white { background-color: #0b1220 !important; }
+.dark .bg-white\/90 { background-color: rgba(11,18,32,0.85) !important; }
+.dark .bg-gray-50 { background-color: #071021 !important; }
+.dark .bg-gray-100 { background-color: #0b1220 !important; }
+
+/* Text colors */
+.dark .text-gray-800, .dark .text-gray-900 { color: #e5e7eb !important; }
+.dark .text-gray-600, .dark .text-gray-500, .dark .text-gray-400 { color: #9ca3af !important; }
+
+/* Borders */
+.dark .border-gray-100, .dark .border-gray-200, .dark .border-gray-300 { border-color: #1f2937 !important; }
+
+/* Inputs / disabled backgrounds */
+.dark .bg-gray-100, .dark .bg-gray-200 { background-color: #0f1724 !important; }
+
+/* Shadows - make them subtler on dark backgrounds */
+.dark .shadow-lg { box-shadow: 0 10px 15px -3px rgba(2,6,23,0.6), 0 4px 6px -2px rgba(2,6,23,0.5) !important; }
+
+/* unified semi-transparent white card (defined earlier) - no duplicate rules here */
+.dark .border-white\/20 { border-color: rgba(255,255,255,0.08) !important; }
+
+/* Backdrop-blur cards: ensure they get a dark translucent background in dark mode */
+.dark .backdrop-blur-sm { -webkit-backdrop-filter: blur(6px) !important; backdrop-filter: blur(6px) !important; }
+
+/* Fallback for white borders used as subtle accents */
+.dark .border-white { border-color: rgba(255,255,255,0.06) !important; }
+
+/* Form controls: make inputs, selects and textareas dark when `.dark` is present */
+.dark input:not([type='checkbox']):not([type='radio']),
+.dark textarea,
+.dark select,
+.dark .form-input,
+.dark .form-select,
+.dark .form-textarea {
+	background-color: #0b1220 !important; /* dark card */
+	color: #e5e7eb !important; /* text on dark */
+	border-color: #1f2937 !important; /* darker border */
+	caret-color: #e5e7eb !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+	color: #9ca3af !important;
+	opacity: 1;
+}
+
+/* Select options: browsers vary, but set a fallback for most modern ones */
+.dark select option {
+	background-color: #0b1220;
+	color: #e5e7eb;
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus,
+.dark .form-input:focus,
+.dark .form-select:focus {
+	outline: none !important;
+	box-shadow: 0 0 0 4px rgba(59,130,246,0.12) !important; /* subtle blue focus */
+	border-color: #3b82f6 !important;
+}
+
+/* Ensure checkboxes/radios keep their intended look */
+.dark input[type='checkbox'],
+.dark input[type='radio'] {
+	background-color: transparent !important;
+}
+
+/* Outline button hover-fill behavior for consistency with Sync Now in dark mode */
+/* Light mode: subtle color-50 fill. Dark mode: subtle translucent fill using the color's 500 with low alpha. */
+
+.border-blue-200.text-blue-700,
+.border-red-200.text-red-700,
+.border-green-200.text-green-700,
+.border-gray-300.text-gray-700,
+.border-gray-300.text-gray-600 {
+	transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+/* Blue */
+.border-blue-200.text-blue-700:hover,
+.border-blue-200.text-blue-700:focus { background-color: #eff6ff; }
+.dark .border-blue-200.text-blue-700:hover,
+.dark .border-blue-200.text-blue-700:focus { background-color: rgba(59,130,246,0.12); }
+
+/* Red */
+.border-red-200.text-red-700:hover,
+.border-red-200.text-red-700:focus { background-color: #fff1f2; }
+.dark .border-red-200.text-red-700:hover,
+.dark .border-red-200.text-red-700:focus { background-color: rgba(239,68,68,0.08); }
+
+/* Green */
+.border-green-200.text-green-700:hover,
+.border-green-200.text-green-700:focus { background-color: #ecfdf5; }
+.dark .border-green-200.text-green-700:hover,
+.dark .border-green-200.text-green-700:focus { background-color: rgba(34,197,94,0.08); }
+
+/* Neutral / gray */
+.border-gray-300.text-gray-700:hover,
+.border-gray-300.text-gray-700:focus,
+.border-gray-300.text-gray-600:hover,
+.border-gray-300.text-gray-600:focus { background-color: #f9fafb; }
+.dark .border-gray-300.text-gray-700:hover,
+.dark .border-gray-300.text-gray-700:focus,
+.dark .border-gray-300.text-gray-600:hover,
+.dark .border-gray-300.text-gray-600:focus { background-color: rgba(255,255,255,0.02); }
+
+/* Slightly stronger outline on focus for keyboard users */
+.border-blue-200.text-blue-700:focus,
+.border-red-200.text-red-700:focus,
+.border-green-200.text-green-700:focus,
+.border-gray-300.text-gray-700:focus {
+	box-shadow: 0 0 0 4px rgba(59,130,246,0.08);
+}
+
+/* Dark-mode safe overrides for the common hover:bg utilities used across components */
+/* These selectors target Tailwind-generated classnames like `hover:bg-gray-50` (escape the colon) */
+
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-white:hover,
+.dark .hover\:bg-white\/90:hover,
+.dark .hover\:bg-gray-100:hover {
+	background-color: rgba(255,255,255,0.02) !important;
+}
+
+.dark .hover\:bg-red-50:hover {
+	background-color: rgba(239,68,68,0.06) !important; /* red-500 6% */
+}
+.dark .hover\:bg-blue-50:hover {
+	background-color: rgba(59,130,246,0.08) !important; /* blue-500 8% */
+}
+.dark .hover\:bg-green-50:hover {
+	background-color: rgba(34,197,94,0.06) !important; /* green-500 6% */
+}
+
+/* Table row hover (many tables use border-b and hover:bg-gray-50) */
+.dark tr.hover\:bg-gray-50:hover,
+.dark .hover\:bg-gray-50 > td:hover {
+	background-color: rgba(255,255,255,0.02) !important;
+}
+
+/* Theme button classes that follow the SystemSettings sidebar color. */
+:root {
+  /* fallback values (will be overridden by SystemSettingsContext) */
+  --color-sidebar: #8b3a3a;
+  --color-sidebar-text: #ffffff;
+  --color-pagination: #6b46c1;
+  --color-pagination-text: #ffffff;
+  --color-approve: #16a34a;
+  --color-reject: #dc2626;
+}
+
+.theme-btn,
+.theme-button {
+  background-color: var(--color-sidebar) !important;
+  color: var(--color-sidebar-text) !important;
+  border-color: transparent !important;
+}
+
+.theme-btn:hover,
+.theme-button:hover {
+  filter: brightness(0.94);
+}
+
+/* Outline variant: uses sidebar color for border/text but transparent background */
+.theme-btn-outline,
+.theme-button-outline {
+  background-color: transparent !important;
+  color: var(--color-sidebar) !important;
+  border: 1px solid var(--color-sidebar) !important;
+}
+
+.theme-btn-outline:hover,
+.theme-button-outline:hover {
+  background-color: rgba(0,0,0,0.04);
+}
+
+/* Pagination theming - active and page styles */
+.pagination-current {
+  background-color: var(--color-pagination) !important;
+  color: var(--color-pagination-text) !important;
+  border-color: var(--color-pagination) !important;
+}
+
+.pagination-page {
+  color: var(--color-pagination) !important;
+  border-color: var(--color-pagination) !important;
+}
+
+.pagination-page:hover {
+  background-color: rgba(0,0,0,0.04);
+}
+
+/* Approve/Reject button theming */
+.approve-button {
+  border-color: var(--color-approve) !important;
+  color: var(--color-approve) !important;
+}
+
+.approve-button:hover {
+  background-color: rgba(22, 163, 74, 0.05);
+}
+
+.reject-button {
+  border-color: var(--color-reject) !important;
+  color: var(--color-reject) !important;
+}
+
+.reject-button:hover {
+  background-color: rgba(220, 38, 38, 0.05);
+}
+
+/* Role Assignment card theming */
+.role-assignment-card {
+	background-color: var(--color-role-assignment-bg);
+	border-color: var(--color-role-assignment-border);
+}
+
+.role-assignment-title {
+	color: #111827; /* dark text for light mode */
+}
+
+.role-assignment-text {
+	color: #111827; /* dark text for light mode */
+	opacity: 0.85;
+}
+
+/* Dark mode: keep card subtle and let icon/text use the role-assignment text color */
+.dark .role-assignment-card {
+	background-color: transparent;
+	border-color: var(--color-role-assignment-border);
+}
+
+.dark .role-assignment-title,
+.dark .role-assignment-text {
+	color: #ffffff; /* always white in dark mode for contrast */
+}

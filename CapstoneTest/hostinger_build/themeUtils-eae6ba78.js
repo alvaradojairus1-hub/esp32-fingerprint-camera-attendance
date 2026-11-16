@@ -1,0 +1,2 @@
+const e=()=>{const e=localStorage.getItem("theme");return"dark"===e||"light"!==e&&document.documentElement.classList.contains("dark")},t=()=>{return t="#000000",n="#e5e7eb",e()?n:t;var t,n},n=t=>{const n=()=>{t(e())};return window.addEventListener("storage",(e=>{"theme"===e.key&&n()})),window.addEventListener("themechange",n),()=>{window.removeEventListener("storage",n),window.removeEventListener("themechange",n)}};export{n as a,t as g,e as i};
+//# sourceMappingURL=themeUtils-eae6ba78.js.map
